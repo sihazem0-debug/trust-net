@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trust Net — Produits Digitaux, Recharge Mobile & Free Fire | Tunisie</title><meta name="description" content="Trust Net — Abonnements IA, streaming, logiciels, VPN, recharge mobile Tunisie Télécom / Ooredoo / Orange et diamants Free Fire en Tunisie. Paiement D17, Flouci. Prix en TND.">
+<link rel="stylesheet" href="/styles.css"></head>
+<body>
+<header><nav class="nav"><a class="logo" href="#">Trust <b>Net</b></a>
+<div class="nav-links"><a href="#catalog" data-i18n="catalog">Catalogue complet</a><a href="#recharge" data-i18n="recharge">Recharge Mobile</a><a href="#cats" data-i18n="cats">Catégories</a><a href="#" id="ordersLink" class="hidden" onclick="showOrders();return false" data-i18n="myOrders">Mes commandes</a></div>
+<button class="btn ghost small" id="langBtn" onclick="switchLang()">العربية</button>
+<button class="btn ghost small" id="authBtn" onclick="openAuth()">Connexion</button>
+<button class="btn" onclick="openCart()">🛒 <span id="cartCount">0</span></button></nav></header>
+
+<main id="storeView">
+<section class="hero"><div class="container"><h1>Produits digitaux <span>premium</span><br>en Tunisie.</h1>
+<p data-i18n="tagline">Abonnements digitaux premium — IA, streaming, logiciels, VPN, recharge mobile &amp; diamants Free Fire.</p>
+<div class="hero-cta"><a class="btn" href="#catalog" data-i18n="shop">Découvrir les produits</a><button class="btn ghost" onclick="waSupport()">💬 WhatsApp</button></div>
+<div class="badges"><span>✅ Livraison instantanée</span><span>💳 D17 • Flouci • Manuel</span><span>🇹🇳 Prix en TND</span><span>🛡️ Garantie &amp; support</span><span>📱 Recharge TT • Ooredoo • Orange</span><span>💎 Diamants Free Fire</span></div></div></section>
+
+<section id="cats"><div class="container"><h2 data-i18n="cats">Catégories</h2><p class="sub">Choisissez votre univers</p>
+<div class="cats">
+<button class="cat" data-cat="ai"><span class="ic">🤖</span><h3>Outils IA</h3><p>ChatGPT, Claude, Gemini, Midjourney…</p></button>
+<button class="cat" data-cat="streaming"><span class="ic">🎬</span><h3>Streaming</h3><p>Netflix, Spotify, YouTube, Disney+</p></button>
+<button class="cat" data-cat="software"><span class="ic">💻</span><h3>Logiciels</h3><p>Microsoft 365, Windows, Grammarly…</p></button>
+<button class="cat" data-cat="vpn"><span class="ic">🛡️</span><h3>VPN</h3><p>NordVPN, ExpressVPN, Surfshark</p></button>
+<button class="cat" data-cat="recharge"><span class="ic">📱</span><h3>Recharge Mobile</h3><p>Forfaits TT, Ooredoo, Orange &amp; crédit</p></button>
+<button class="cat" data-cat="gaming"><span class="ic">💎</span><h3>Gaming</h3><p>Diamants Free Fire, Membership &amp; Booyah Pass</p></button>
+</div></div></section>
+
+<section><div class="container"><h2 data-i18n="featured">Produits à la une</h2><div class="grid" id="featuredGrid"></div></div></section>
+
+<section><div class="container"><div class="offer"><div><h2 data-i18n="offers">Offres spéciales</h2><p class="sub">Prix gros disponibles sur tous les produits — sélectionnez « Gros » dans le panier.</p></div><a class="btn" href="#catalog">Voir les offres →</a></div></div></section>
+
+<section id="recharge"><div class="container"><h2 data-i18n="rechargeTitle">Recharge Mobile — Tunisie</h2><p class="sub">Tunisie Télécom, Ooredoo ou Orange — choisissez le montant, entrez le numéro, payez par D17 / Flouci.</p>
+<div class="recharge-box"><form onsubmit="submitRecharge(event)">
+<label data-i18n="operator">Opérateur</label><div class="row" id="opRow">
+<button type="button" class="op-btn tt active" onclick="setRechargeOperator('Tunisie Télécom',this)">Tunisie Télécom</button>
+<button type="button" class="op-btn ooredoo" onclick="setRechargeOperator('Ooredoo',this)">Ooredoo</button>
+<button type="button" class="op-btn orange" onclick="setRechargeOperator('Orange',this)">Orange</button></div>
+<label data-i18n="amount">Montant (TND)</label><div class="row" id="amtRow">
+<button type="button" class="amt-btn" onclick="setRechargeAmount(5,this)">5 DT</button>
+<button type="button" class="amt-btn active" onclick="setRechargeAmount(10,this)">10 DT</button>
+<button type="button" class="amt-btn" onclick="setRechargeAmount(20,this)">20 DT</button>
+<button type="button" class="amt-btn" onclick="setRechargeAmount(50,this)">50 DT</button>
+<button type="button" class="amt-btn" onclick="setRechargeAmount(100,this)">100 DT</button></div>
+<label data-i18n="rechargePhone">Numéro à recharger (tunisien)</label><input id="rPhone" required placeholder="Ex : 20123456 ou +216 20 123 456" inputmode="tel">
+<label data-i18n="name">Nom complet</label><input id="rName" required>
+<label data-i18n="payMethod">Méthode de paiement</label>
+<select id="rPayMethod" required><option value="">—</option><option>D17</option><option>Flouci</option><option>Paiement manuel</option></select>
+<label data-i18n="payRef">Référence de paiement (n° transaction)</label><input id="rPayRef" placeholder="Ex : D17-123456">
+<p style="color:var(--muted);font-size:.9rem;margin-top:10px">Vous préférez un forfait internet ? Retrouvez tous les forfaits TT, Ooredoo et Orange dans le catalogue ci-dessous (catégorie Recharge Mobile).</p>
+<button class="btn" style="width:100%;margin-top:14px" data-i18n="rechargeNow">Recharger maintenant</button>
+</form></div></div></section>
+
+<section id="catalog"><div class="container"><h2 data-i18n="catalog">Catalogue complet</h2>
+<div class="toolbar"><input id="search" data-i18n-ph="searchPh" placeholder="Rechercher un produit…">
+<select id="catFilter"><option value="">Toutes catégories</option><option value="ai">Outils IA</option><option value="streaming">Streaming</option><option value="software">Logiciels</option><option value="vpn">VPN</option><option value="recharge">Recharge Mobile</option><option value="gaming">Gaming — Free Fire</option></select>
+<input id="maxPrice" type="number" min="0" placeholder="Prix max (TND)"></div>
+<div class="grid" id="catalogGrid"></div></div></section>
+</main>
+
+<footer><div class="container">© 2026 Trust Net — Tunisie • Paiement D17 • Flouci • Manuel • Support WhatsApp • Recharge Mobile • Free Fire • Prix en TND<br><a href="/admin" style="color:var(--muted);font-size:.85rem">Espace Admin</a></div></footer>
+
+<!-- Cart drawer -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<aside class="drawer" id="cartDrawer"><h3>🛒 <span data-i18n="cart">Panier</span></h3><div id="cartItems" style="margin:12px 0"></div>
+<p style="font-size:1.2rem"><span data-i18n="total">Total</span> : <b id="cartTotal">0 TND</b></p>
+<button class="btn" style="width:100%;margin-top:12px" onclick="closeCart();openModal('checkoutModal')" data-i18n="checkout">Commander</button>
+<button class="btn ghost" style="width:100%;margin-top:8px" onclick="closeCart()" data-i18n="cancel">Annuler</button></aside>
+
+<!-- Checkout modal -->
+<div class="modal" id="checkoutModal"><div class="modal-box"><h3 data-i18n="checkout">Commander</h3>
+<form onsubmit="submitOrder(event)">
+<label data-i18n="name">Nom complet</label><input id="coName" required>
+<label data-i18n="phone">Téléphone</label><input id="coPhone" required placeholder="+216 …">
+<label data-i18n="email">Email</label><input id="coEmail" type="email">
+<label data-i18n="payMethod">Méthode de paiement</label>
+<select id="payMethod" onchange="payInfo()" required><option value="">—</option><option>D17</option><option>Flouci</option><option>Paiement manuel</option></select>
+<div class="pay-box" id="payInfo" style="display:none"></div>
+<label data-i18n="payRef">Référence de paiement (n° transaction)</label><input id="payRef" placeholder="Ex : D17-123456">
+<div id="playerField" class="hidden"><label data-i18n="playerId">Player ID Free Fire</label><input id="coPlayerId" placeholder="Ex : 123456789"><p style="color:var(--muted);font-size:.85rem">Livraison sur votre Player ID — ne partagez jamais votre mot de passe.</p></div>
+<button class="btn" style="width:100%;margin-top:14px" data-i18n="confirm">Confirmer la commande</button>
+<button type="button" class="btn ghost" style="width:100%;margin-top:8px" onclick="closeModal('checkoutModal')" data-i18n="cancel">Annuler</button></form></div></div>
+
+<!-- Detail / Order / Orders modals -->
+<div class="modal" id="detailModal"><div class="modal-box"><div id="detailBox"></div><button class="btn ghost" style="margin-top:12px" onclick="closeModal('detailModal')" data-i18n="cancel">Annuler</button></div></div>
+<div class="modal" id="orderModal"><div class="modal-box"><div id="orderResult"></div><button class="btn" style="margin-top:12px" onclick="closeModal('orderModal')" data-i18n="cancel">Fermer</button></div></div>
+<div class="modal" id="ordersModal"><div class="modal-box"><h3 data-i18n="myOrders">Mes commandes</h3><div id="ordersBox"></div><button class="btn ghost" style="margin-top:12px" onclick="closeModal('ordersModal')" data-i18n="cancel">Fermer</button></div></div>
+
+<!-- Auth modal -->
+<div class="modal" id="authModal"><div class="modal-box"><h3>👤 <span data-i18n="login">Connexion</span> / <span data-i18n="register">Créer un compte</span></h3>
+<form onsubmit="doLogin(event)"><label data-i18n="name">Nom complet</label><input id="aName" placeholder="Pour l’inscription">
+<label>Email</label><input id="aEmail" type="email" required><label>Mot de passe</label><input id="aPass" type="password" required minlength="6">
+<label data-i18n="phone">Téléphone</label><input id="aPhone">
+<button class="btn" style="width:100%;margin-top:14px" data-i18n="login">Connexion</button></form>
+<button class="btn ghost" style="width:100%;margin-top:8px" onclick="doRegister(event)" data-i18n="register">Créer un compte</button>
+<button class="btn ghost" style="width:100%;margin-top:8px" onclick="closeModal('authModal')" data-i18n="cancel">Annuler</button></div></div>
+
+<button class="whatsapp-fab" onclick="waSupport()">💬 WhatsApp</button>
+<div class="toast" id="toast"></div>
+<script src="/app.js"></script>
+</body></html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trust Net — Espace Admin</title>
+<meta name="description" content="Trust Net — Tableau de bord administrateur : statistiques, commandes, produits, clients et paramètres.">
+<link rel="stylesheet" href="/styles.css"></head>
+<body>
+<header><nav class="nav admin-nav"><a class="logo" href="/">Trust <b>Net</b> <span class="admin-tag">Admin</span></a>
+<div class="nav-links" id="adminTabs">
+<button class="tab-link active" data-tab="dashboard" onclick="showTab('dashboard')">📊 <span data-i18n="dashboard">Tableau de bord</span></button>
+<button class="tab-link" data-tab="orders" onclick="showTab('orders')">🧾 <span data-i18n="orders">Commandes</span></button>
+<button class="tab-link" data-tab="products" onclick="showTab('products')">📦 <span data-i18n="products">Produits</span></button>
+<button class="tab-link" data-tab="customers" onclick="showTab('customers')">👥 <span data-i18n="customers">Clients</span></button>
+<button class="tab-link" data-tab="settings" onclick="showTab('settings')">⚙️ <span data-i18n="settings">Paramètres</span></button>
+</div>
+<a class="btn ghost small" href="/" data-i18n="backToStore">← Retour à la boutique</a>
+<button class="btn ghost small" id="langBtn" onclick="switchLang()">العربية</button>
+<button class="btn ghost small hidden" id="logoutBtn" onclick="logout()" data-i18n="logout">Déconnexion</button></nav></header>
+
+<main class="container" style="padding-top:28px">
+<!-- Écran de connexion admin -->
+<section id="loginView">
+<div class="admin-login"><h1>🛠️ <span data-i18n="adminLogin">Connexion Admin</span></h1>
+<p class="sub" data-i18n="adminLoginSub">Accès réservé à l'administrateur de Trust Net.</p>
+<div id="loginError" class="admin-error hidden"></div>
+<form onsubmit="doAdminLogin(event)">
+<label>Email</label><input id="loginEmail" type="email" required value="admin@trustnet.tn" autocomplete="username">
+<label data-i18n="password">Mot de passe</label><input id="loginPass" type="password" required minlength="6" autocomplete="current-password">
+<button class="btn" style="width:100%;margin-top:16px" data-i18n="login">Connexion</button></form>
+<p class="sub" style="margin-top:14px"><a href="/" data-i18n="backToStore">← Retour à la boutique</a></p></div>
+</section>
+
+<!-- Tableau de bord admin -->
+<section id="adminView" class="hidden">
+<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+<h2>🛠️ <span data-i18n="adminTitle">Tableau de bord Admin</span></h2>
+<span class="meta" id="adminWho"></span></div>
+
+<div id="tab-dashboard" class="admin-tab">
+<div class="admin-grid" style="margin-top:16px">
+<div class="stat"><span data-i18n="revenue">Revenu</span><b id="statRevenue">0 TND</b></div>
+<div class="stat"><span data-i18n="orders">Commandes</span><b id="statOrders">0</b></div>
+<div class="stat"><span data-i18n="products">Produits</span><b id="statProducts">0</b></div>
+<div class="stat"><span data-i18n="pending">En attente</span><b id="statPending">0</b></div></div>
+<h3 data-i18n="recentOrders">Commandes récentes</h3><div id="recentOrders" style="overflow:auto"></div>
+</div>
+
+<div id="tab-orders" class="admin-tab hidden">
+<h3 data-i18n="orders">Commandes</h3>
+<div class="toolbar"><select id="orderStatusFilter" onchange="renderOrders()"><option value="" data-i18n="allStatuses">Tous les statuts</option><option>Pending</option><option>Processing</option><option>Completed</option><option>Cancelled</option></select>
+<input id="orderSearch" placeholder="Rechercher (nom, téléphone, Player ID)…" oninput="renderOrders()"></div>
+<div id="adminOrders" style="overflow:auto"></div></div>
+
+<div id="tab-products" class="admin-tab hidden">
+<h3 data-i18n="products">Produits</h3>
+<div class="toolbar"><input id="productSearch" placeholder="Rechercher un produit…" oninput="renderProducts()">
+<select id="productCatFilter" onchange="renderProducts()"><option value="" data-i18n="allCats">Toutes catégories</option><option value="ai">Outils IA</option><option value="streaming">Streaming</option><option value="software">Logiciels</option><option value="vpn">VPN</option><option value="recharge">Recharge Mobile</option><option value="gaming">Gaming — Free Fire</option></select>
+<button class="btn" onclick="newProduct()">+ <span data-i18n="newProduct">Nouveau produit</span></button></div>
+<div id="adminProducts"></div></div>
+
+<div id="tab-customers" class="admin-tab hidden">
+<h3 data-i18n="customers">Clients</h3><div id="adminCustomers" style="overflow:auto"></div></div>
+
+<div id="tab-settings" class="admin-tab hidden">
+<h3 data-i18n="settings">Paramètres</h3>
+<div class="settings-grid">
+<form class="settings-card" onsubmit="saveSettings(event)">
+<h4>💬 WhatsApp</h4><p class="sub" data-i18n="waHelp">Numéro utilisé pour le support et les liens de confirmation de commande (format international, sans + ni espaces).</p>
+<label data-i18n="waNumber">Numéro WhatsApp</label><input id="setWa" required placeholder="21620123456">
+<button class="btn" style="margin-top:12px" data-i18n="save">Enregistrer</button></form>
+<form class="settings-card" onsubmit="changePassword(event)">
+<h4>🔒 <span data-i18n="changePassword">Changer le mot de passe admin</span></h4>
+<label data-i18n="currentPassword">Mot de passe actuel</label><input id="pwCurrent" type="password" required minlength="6">
+<label data-i18n="newPassword">Nouveau mot de passe</label><input id="pwNew" type="password" required minlength="6">
+<label data-i18n="newPassword2">Confirmer le nouveau mot de passe</label><input id="pwNew2" type="password" required minlength="6">
+<button class="btn" style="margin-top:12px" data-i18n="save">Enregistrer</button></form>
+</div></div>
+</section>
+</main>
+
+<!-- Modale produit -->
+<div class="modal" id="productModal"><div class="modal-box"><h3 data-i18n="newProduct">Nouveau produit</h3>
+<form onsubmit="saveProduct(event)"><input type="hidden" id="pfId">
+<label data-i18n="products">Produits</label><input id="pfName" required>
+<label data-i18n="category">Catégorie</label><select id="pfCat"><option value="ai">Outils IA</option><option value="streaming">Streaming</option><option value="software">Logiciels</option><option value="vpn">VPN</option><option value="recharge">Recharge Mobile</option><option value="gaming">Gaming — Free Fire</option></select>
+<label data-i18n="desc">Description</label><input id="pfDesc">
+<label data-i18n="price">Prix détail (TND)</label><input id="pfPrice" type="number" step="0.01" required>
+<label data-i18n="wsPrice">Prix gros (TND)</label><input id="pfWs" type="number" step="0.01">
+<label data-i18n="duration">Durée (mois)</label><input id="pfDur" type="number" value="1">
+<label>Stock</label><input id="pfStock" type="number" value="0">
+<label data-i18n="badge">Badge</label><input id="pfBadge" placeholder="Promo / Top / Nouveau">
+<label data-i18n="icon">Icône (emoji)</label><input id="pfIcon" value="📦">
+<label>Image (URL, ex : /images/netflix.svg)</label><input id="pfImage" placeholder="/images/nom.svg">
+<label>Validité (ex : 30 jours, Livraison par Player ID)</label><input id="pfValidity" placeholder="30 jours">
+<label><input type="checkbox" id="pfFeat" style="width:auto"> <span data-i18n="featuredCb">Produit à la une</span></label>
+<button class="btn" style="width:100%;margin-top:14px" data-i18n="save">Enregistrer</button>
+<button type="button" class="btn ghost" style="width:100%;margin-top:8px" onclick="closeModal('productModal')" data-i18n="cancel">Annuler</button></form></div></div>
+
+<div class="toast" id="toast"></div>
+<script src="/admin.js"></script>
+</body></html>
